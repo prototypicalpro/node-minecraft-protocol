@@ -60,7 +60,12 @@ class Splitter extends Transform {
         try {
           this.push(this.buffer.slice(offset + size, offset + size + value))
           offset += size + value;
-          ({ value, size } = readVarInt(this.buffer, offset))
+          if (offset < this.buffer.length) {
+            ({ value, size } = readVarInt(this.buffer, offset))
+          }
+          else {
+            break;
+          }
         } catch (e) {
           if (e.partialReadError) {
             break
